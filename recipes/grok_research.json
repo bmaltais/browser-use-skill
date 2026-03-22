@@ -1,0 +1,57 @@
+{
+  "name": "grok_research",
+  "version": 1,
+  "description": "Submit a research query to X Grok and extract the full response. USAGE: Edit the 'query' variable in the 'inject_query' step before running. Requires Chrome with CDP (--connect). Static alternative: `bash ~/.claude/skills/browser-use/grok.sh \"your question here\"`",
+  "url": "https://x.com/i/grok",
+  "auth": {
+    "mode": "connect",
+    "profile": null,
+    "headed": false,
+    "session": "default"
+  },
+  "steps": [
+    {
+      "id": "nav",
+      "type": "navigate",
+      "url": "https://x.com/i/grok",
+      "wait_for": "textarea[placeholder='Ask anything']",
+      "wait_timeout_ms": 10000
+    },
+    {
+      "id": "inject_query",
+      "type": "eval",
+      "js": "(function() { const query = 'REPLACE_WITH_YOUR_QUERY'; const ta = document.querySelector('textarea[placeholder=\"Ask anything\"]'); if (!ta) return 'ERROR: textarea not found'; const setter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value').set; setter.call(ta, query); ta.dispatchEvent(new Event('input', { bubbles: true })); ta.focus(); return 'query injected: ' + query.substring(0, 60); })()",
+      "output_var": "inject_status"
+    },
+    {
+      "id": "submit",
+      "type": "eval",
+      "js": "(function() { const btn = document.querySelector('[aria-label=\"Grok something\"]'); if (!btn) return 'ERROR: submit button not found'; btn.click(); return 'submitted'; })()",
+      "output_var": "submit_status"
+    },
+    {
+      "id": "wait_response",
+      "type": "wait",
+      "text": "Thought for",
+      "timeout_ms": 90000
+    },
+    {
+      "id": "extract_response",
+      "type": "eval",
+      "js": "(function() { const spans = Array.from(document.querySelectorAll('span, p, li, h2, h3')).map(e => e.innerText.trim()).filter(t => t.length > 25); const start = spans.findIndex(t => t.startsWith('Based on') || t.startsWith('Here are') || t.startsWith('According') || t.length > 80); return spans.slice(start >= 0 ? start : 0, start + 120).join('\\n'); })()",
+      "output_var": "response",
+      "fallback_selectors": []
+    }
+  ],
+  "output": {
+    "format": "text",
+    "var": "response"
+  },
+  "metadata": {
+    "created": "2026-03-22",
+    "last_run": null,
+    "last_run_status": null,
+    "run_count": 0,
+    "broken_step": null
+  }
+}
