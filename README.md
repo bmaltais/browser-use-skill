@@ -16,7 +16,7 @@ Works on **Linux**, **macOS**, and **Windows** (Git Bash or WSL required on Wind
 
 ```bash
 # Clone into your Claude Code skills directory
-git clone https://github.com/bernardmaltais/browser-use-skill ~/.claude/skills/browser-use
+git clone https://github.com/bmaltais/browser-use-skill ~/.claude/skills/browser-use
 
 # First run auto-bootstraps the .venv (takes ~60s, downloads ~200MB)
 bash ~/.claude/skills/browser-use/bu.sh open https://example.com
