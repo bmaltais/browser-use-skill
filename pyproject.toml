@@ -1,0 +1,8 @@
+[project]
+name = "browser-use-skill"
+version = "0.1.0"
+description = "Self-contained browser automation skill"
+requires-python = ">=3.11"
+dependencies = [
+    "browser-use @ git+https://github.com/browser-use/browser-use.git",
+]

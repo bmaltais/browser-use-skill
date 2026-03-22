@@ -1,0 +1,42 @@
+{
+  "name": "x_notifications",
+  "version": 1,
+  "description": "Fetch X.com notifications \u2014 requires Chrome running with CDP (--connect)",
+  "url": "https://x.com/notifications",
+  "auth": {
+    "mode": "connect",
+    "profile": null,
+    "headed": false,
+    "session": "default"
+  },
+  "steps": [
+    {
+      "id": "nav",
+      "type": "navigate",
+      "url": "https://x.com/notifications",
+      "wait_for": "[data-testid='primaryColumn']",
+      "wait_timeout_ms": 10000
+    },
+    {
+      "id": "extract_notifs",
+      "type": "eval",
+      "js": "Array.from(document.querySelectorAll('[data-testid=\"cellInnerDiv\"]')).map(n => n.innerText.trim()).filter(t => t.length > 0).join('\\n---\\n')",
+      "output_var": "notifications",
+      "fallback_selectors": [
+        "[data-testid='notification']",
+        "[aria-label*='Timeline: Notifications'] article"
+      ]
+    }
+  ],
+  "output": {
+    "format": "text",
+    "var": "notifications"
+  },
+  "metadata": {
+    "created": "2026-03-22",
+    "last_run": "2026-03-22",
+    "last_run_status": "ok",
+    "run_count": 1,
+    "broken_step": null
+  }
+}

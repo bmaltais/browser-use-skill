@@ -1,0 +1,5 @@
+.venv/
+__pycache__/
+*.pyc
+# Diagnostic screenshots saved when a recipe step breaks
+recipes/.broken_*
